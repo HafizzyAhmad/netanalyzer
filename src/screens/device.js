@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
 import getInfo from '../DeviceInfo';
 import DeviceInfo, { getManufacturer } from 'react-native-device-info';
 
@@ -79,7 +79,7 @@ const Home = () => {
     setDeviceHardware(device);
   };
 
-  // console.log('Device Hardware', deviceHardware);
+  console.log('Device Hardware', deviceHardware);
   return (
     <ScrollView>
       <Text style={{ color: 'black' }}>This is where we show device info</Text>

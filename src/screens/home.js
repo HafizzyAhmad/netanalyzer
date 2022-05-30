@@ -3,6 +3,7 @@ import { View, Text, Button, PermissionsAndroid, Platform } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { useNetInfo } from '@react-native-community/netinfo';
 import Container from '../elements/Container';
+import { Fragment } from 'react/cjs/react.production.min';
 
 const Home = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -55,16 +56,65 @@ const Home = ({ navigation }) => {
     }
   }, [netInfo.isConnected, location]);
 
+  const obj = JSON.parse(JSON.stringify(netInfo));
+  console.log('Check object', obj);
+
   return (
     <Container>
       <Text style={{ color: 'black' }}>
         This is where we show connection info
       </Text>
-      <Text style={{ color: 'black' }}>{JSON.stringify(netInfo.type)}</Text>
-      <Text style={{ color: 'black' }}>
-        Connected {JSON.stringify(netInfo.isConnected)}
-      </Text>
-      <Text style={{ color: 'black' }}>{JSON.stringify(netInfo.details)}</Text>
+      <Text style={{ color: 'black' }}>{`Connection Type: ${obj.type}`}</Text>
+      <Text
+        style={{
+          color: 'black',
+        }}>{`Connection availability: ${obj.isConnected}`}</Text>
+      <Text
+        style={{
+          color: 'black',
+        }}>{`Internet availability: ${obj.isInternetReachable}`}</Text>
+      <Text
+        style={{ color: 'black' }}>{`WiFi enable: ${obj.isWifiEnabled}`}</Text>
+
+      <Text
+        style={{
+          color: 'black',
+        }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
+      {obj.type === 'cellular' ? (
+        <Fragment>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`Carrier: ${obj.details.carrier}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`Generation: ${obj.details.cellularGeneration}`}</Text>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <Text
+            style={{ color: 'black' }}>{`WiFi Name: ${obj.details.ssid}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`Frequency: ${obj.details.frequency}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`WiFI Strength: ${obj.details.strength}%`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`WiFi BSSID: ${obj.details.bssid}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`IP Address: ${obj.details.ipAddress}`}</Text>
+          <Text
+            style={{ color: 'black' }}>{`Subnet: ${obj.details.subnet}`}</Text>
+        </Fragment>
+      )}
       <Button
         onPress={() => navigation.navigate('Device')}
         title="View Device Info"
