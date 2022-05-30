@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
             message: 'This app needs access to your location',
             buttonNeutral: 'Ask Me Later',
             buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
+            buttonPositive: 'Okay',
           },
         );
         console.log('Check granted', granted);
