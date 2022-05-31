@@ -11,7 +11,7 @@ const Container = ({ children }) => (
   <SafeAreaView
     style={{
       flex: 1,
-      backgroundColor: '#ff6600',
+      backgroundColor: '#fffbdd',
     }}>
     {children}
   </SafeAreaView>
