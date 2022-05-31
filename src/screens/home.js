@@ -59,6 +59,8 @@ const Home = ({ navigation }) => {
   const obj = JSON.parse(JSON.stringify(netInfo));
   console.log('Check object', obj);
 
+  console.log('Null tak', obj.details === null);
+
   return (
     <Container>
       <Text style={{ color: 'black' }}>
@@ -75,12 +77,7 @@ const Home = ({ navigation }) => {
         }}>{`Internet availability: ${obj.isInternetReachable}`}</Text>
       <Text
         style={{ color: 'black' }}>{`WiFi enable: ${obj.isWifiEnabled}`}</Text>
-
-      <Text
-        style={{
-          color: 'black',
-        }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
-      {obj.type === 'cellular' ? (
+      {obj.detail !== null && obj.type === 'cellular' && (
         <Fragment>
           <Text
             style={{
@@ -90,8 +87,13 @@ const Home = ({ navigation }) => {
             style={{
               color: 'black',
             }}>{`Generation: ${obj.details.cellularGeneration}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
         </Fragment>
-      ) : (
+      )}
+      {obj.detail !== null && obj.type === 'wifi' && (
         <Fragment>
           <Text
             style={{ color: 'black' }}>{`WiFi Name: ${obj.details.ssid}`}</Text>
@@ -113,8 +115,13 @@ const Home = ({ navigation }) => {
             }}>{`IP Address: ${obj.details.ipAddress}`}</Text>
           <Text
             style={{ color: 'black' }}>{`Subnet: ${obj.details.subnet}`}</Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
         </Fragment>
       )}
+
       <Button
         onPress={() => navigation.navigate('Device')}
         title="View Device Info"
