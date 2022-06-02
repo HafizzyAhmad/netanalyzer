@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, PermissionsAndroid, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  PermissionsAndroid,
+  Platform,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { useNetInfo } from '@react-native-community/netinfo';
 import Container from '../elements/Container';
-import { Fragment } from 'react/cjs/react.production.min';
+import Primary from '../components/primary';
+import Header from '../components/header';
 
 const Home = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -61,13 +70,26 @@ const Home = ({ navigation }) => {
 
   console.log('Null tak', obj.details === null);
 
+  const imgWave = require('../assets/image/pulse.png');
+
   return (
     <Container>
-      <Text style={{ color: 'black' }}>
-        This is where we show connection info
-      </Text>
-      <Text style={{ color: 'black' }}>{`Connection Type: ${obj.type}`}</Text>
-      <Text
+      <Header />
+      <TouchableOpacity style={{ alignItems: 'center' }}>
+        <Image
+          source={imgWave}
+          style={{
+            height: 300,
+            width: 300,
+          }}
+        />
+      </TouchableOpacity>
+      <View style={{alignItems: 'center'}}>
+        <Text style={{ color: 'black', fontFamily: 'ProximaNova-Extrabold' }}>
+          This is where we show connection info
+        </Text>
+         <Text style={{ color: 'black' }}>{`${obj.type}`}</Text>
+      {/*<Text
         style={{
           color: 'black',
         }}>{`Connection availability: ${obj.isConnected}`}</Text>
@@ -78,7 +100,7 @@ const Home = ({ navigation }) => {
       <Text
         style={{ color: 'black' }}>{`WiFi enable: ${obj.isWifiEnabled}`}</Text>
       {obj.detail !== null && obj.type === 'cellular' && (
-        <Fragment>
+        <>
           <Text
             style={{
               color: 'black',
@@ -91,10 +113,10 @@ const Home = ({ navigation }) => {
             style={{
               color: 'black',
             }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
-        </Fragment>
+        </>
       )}
       {obj.detail !== null && obj.type === 'wifi' && (
-        <Fragment>
+        <>
           <Text
             style={{ color: 'black' }}>{`WiFi Name: ${obj.details.ssid}`}</Text>
           <Text
@@ -119,23 +141,25 @@ const Home = ({ navigation }) => {
             style={{
               color: 'black',
             }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
-        </Fragment>
-      )}
+        </>
+      )} */}
 
-      <Button
-        onPress={() => navigation.navigate('Device')}
-        title="View Device Info"
-        color="#841584"
-      />
-      {location === true ? (
-        <Text style={{ color: 'black' }}>Location enabled</Text>
-      ) : (
         <Button
-          onPress={() => alert('Go to setting')}
-          title="Enable Location"
+          onPress={() => navigation.navigate('Device')}
+          title="View Device Info"
           color="#841584"
         />
-      )}
+        {location === true ? (
+          <Text style={{ color: 'black' }}>Location enabled</Text>
+        ) : (
+          <Button
+            onPress={() => alert('Go to setting')}
+            title="Enable Location"
+            color="#841584"
+          />
+        )}
+        <Primary />
+      </View>
     </Container>
   );
 };
