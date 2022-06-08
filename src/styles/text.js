@@ -12,8 +12,9 @@ bold = 'ProximaNova-Bold';
 regular = 'ProximaNova-Regular';
 thin = 'ProximaNova-Thin';
 
-let TITLE, HEADER, SUBHEADER, BODY, DESCRIPTION, CAPTION, FOOTNOTE;
-TITLE = smallRes ? 20 : 21;
+let TITLE, SUBTITLE, HEADER, SUBHEADER, BODY, DESCRIPTION, CAPTION, FOOTNOTE;
+TITLE = smallRes ? 28 : 27;
+SUBTITLE = smallRes ? 24 : 23;
 HEADER = smallRes ? 18 : 19;
 SUBHEADER = smallRes ? 17 : 18;
 BODY = smallRes ? 13 : 14;
@@ -21,9 +22,20 @@ DESCRIPTION = smallRes ? 12 : 13;
 CAPTION = smallRes ? 11 : 12;
 FOOTNOTE = smallRes ? 9 : 10;
 
-let bodyRegular, bodyBold;
+let titleBold,
+  titleRegular,
+  bodyRegular,
+  bodyBold,
+  bodyTitle,
+  bodyTitleBold,
+  captionBold;
+titleBold = { fontSize: TITLE, fontFamily: bold };
+titleRegular = { fontSize: SUBTITLE, fontFamily: regular };
 bodyRegular = { fontSize: BODY, fontFamily: regular };
 bodyBold = { fontSize: BODY, fontFamily: bold };
+bodyTitle = { fontSize: HEADER, fontFamily: regular };
+bodyTitleBold = { fontSize: HEADER, fontFamily: bold };
+captionBold = { fontSize: CAPTION, fontFamily: bold };
 
 export default StyleSheet.create({
   //BODY
@@ -31,4 +43,13 @@ export default StyleSheet.create({
   bodyRegWhite: { ...bodyRegular, ...color.fontColorWhite },
   bodyBold: { ...bodyBold, ...color.fontColor },
   bodyBoldWhite: { ...bodyBold, ...color.fontColorWhite },
+  bodyTitleReg: { ...bodyTitle, ...color.fontColor },
+  bodyTitleRegWhite: { ...bodyTitle, ...color.fontColorWhite },
+  bodyTitleBold: { ...bodyTitleBold, ...color.fontColor },
+  bodyTitleBoldWhite: { ...bodyTitleBold, ...color.fontColorWhite },
+  labelBoldPurple: { ...captionBold, ...color.purple },
+
+  //TITLE
+  titleBold: { ...titleBold, ...color.fontColor },
+  subTitle: { ...titleRegular, ...color.fontColor },
 });

@@ -14,9 +14,9 @@ import * as RootNavigation from '../routes/RootNavigation';
 
 const Header = ({ title, hasArrow }) => {
   return (
-    <View style={[header.arrowContainer,{ backgroundColor: 'red'}]}>
+    <View style={[header.arrowContainer]}>
       <View style={header.headerContainer}>
-        <Text style={{color: 'black', fontSize: 20}}>Analyzer App</Text>
+        <Text style={{color: 'black', fontSize: 20}}>{title}</Text>
         {/* <ArrowLeft /> */}
       </View>
     </View>

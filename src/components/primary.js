@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import primary from '../styles/button';
 
-const Primary = () => {
+const Primary = ({ onPress, title }) => {
   return (
     <TouchableOpacity
+      onPress={onPress}
       style={{
         backgroundColor: 'black',
         width: '50%',
@@ -12,7 +13,7 @@ const Primary = () => {
         borderRadius: 20,
         justifyContent: 'center',
       }}>
-      <Text style={{ color: 'red', textAlign: 'center' }}>Button Primary</Text>
+      <Text style={{ color: 'red', textAlign: 'center' }}>{title}</Text>
     </TouchableOpacity>
   );
 };

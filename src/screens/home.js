@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import Container from '../elements/Container';
 import Primary from '../components/primary';
 import Header from '../components/header';
+import text from '../styles/text';
+import List from '../components/list';
 
 const Home = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -35,6 +37,7 @@ const Home = ({ navigation }) => {
         console.log('Check granted', granted);
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           setLocation(true);
+          NetInfo.refresh().then();
           // alert('Location permission approved');
         } else {
           setLocation(false);
@@ -66,16 +69,83 @@ const Home = ({ navigation }) => {
   }, [netInfo.isConnected, location]);
 
   const obj = JSON.parse(JSON.stringify(netInfo));
-  console.log('Check object', obj);
-
-  console.log('Null tak', obj.details === null);
-
   const imgWave = require('../assets/image/pulse.png');
+  const connectionType = obj.type.toUpperCase();
+
+  const itemDetails = [
+    {
+      caption: 'Connection Availability: ',
+      value:
+        obj.isConnected === null
+          ? 'Not Available'
+          : obj.isConnected
+          ? 'YES'
+          : 'NO',
+    },
+    {
+      caption: 'Internet Availability: ',
+      value:
+        obj.isInternetReachable === null
+          ? 'Not Available'
+          : obj.isConnected
+          ? 'YES'
+          : 'NO',
+    },
+    {
+      caption: 'Wi-Fi Enable: ',
+      value:
+        obj.isWifiEnabled === null
+          ? 'Not Available'
+          : obj.isWifiEnabled
+          ? 'YES'
+          : 'NO',
+    },
+    {
+      caption: 'Connection Expensive: ',
+      value:
+        obj.isConnectionExpensive === null
+          ? 'Not Available'
+          : obj.isConnected
+          ? 'YES'
+          : 'NO',
+    },
+  ];
+
+  const itemDetailsWifi = [
+    {
+      caption: 'Frequency: ',
+      value: obj.details === null ? 'Not Available' : obj.details.frequency,
+    },
+    {
+      caption: 'Strength: ',
+      value: obj.details === null ? 'Not Available' : obj.details.strength,
+    },
+    {
+      caption: 'BSSID: ',
+      value: obj.details === null ? 'Not Available' : obj.details.bssid,
+    },
+    {
+      caption: 'IP Address: ',
+      value: obj.details === null ? 'Not Available' : obj.details.ipAddress,
+    },
+    {
+      caption: 'Subnet: ',
+      value: obj.details === null ? 'Not Available' : obj.details.subnet,
+    },
+  ];
+
+  const itemDetailsCellular = [
+    {
+      caption: 'Generation: ',
+      value:
+        obj.details === null ? 'Not Available' : obj.details.cellularGeneration,
+    },
+  ];
 
   return (
     <Container>
-      <Header />
-      <TouchableOpacity style={{ alignItems: 'center' }}>
+      <Header title='Analyzer App'/>
+      <TouchableOpacity style={{ alignItems: 'center', padding: 20 }}>
         <Image
           source={imgWave}
           style={{
@@ -84,72 +154,55 @@ const Home = ({ navigation }) => {
           }}
         />
       </TouchableOpacity>
-      <View style={{alignItems: 'center'}}>
-        <Text style={{ color: 'black', fontFamily: 'ProximaNova-Extrabold' }}>
-          This is where we show connection info
-        </Text>
-         <Text style={{ color: 'black' }}>{`${obj.type}`}</Text>
-      {/*<Text
-        style={{
-          color: 'black',
-        }}>{`Connection availability: ${obj.isConnected}`}</Text>
-      <Text
-        style={{
-          color: 'black',
-        }}>{`Internet availability: ${obj.isInternetReachable}`}</Text>
-      <Text
-        style={{ color: 'black' }}>{`WiFi enable: ${obj.isWifiEnabled}`}</Text>
-      {obj.detail !== null && obj.type === 'cellular' && (
-        <>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`Carrier: ${obj.details.carrier}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`Generation: ${obj.details.cellularGeneration}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
-        </>
-      )}
-      {obj.detail !== null && obj.type === 'wifi' && (
-        <>
-          <Text
-            style={{ color: 'black' }}>{`WiFi Name: ${obj.details.ssid}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`Frequency: ${obj.details.frequency}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`WiFI Strength: ${obj.details.strength}%`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`WiFi BSSID: ${obj.details.bssid}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`IP Address: ${obj.details.ipAddress}`}</Text>
-          <Text
-            style={{ color: 'black' }}>{`Subnet: ${obj.details.subnet}`}</Text>
-          <Text
-            style={{
-              color: 'black',
-            }}>{`Connection Expensive: ${obj.details.isConnectionExpensive}`}</Text>
-        </>
-      )} */}
+      <View style={{ alignItems: 'center' }}>
+        <Text style={text.bodyBold}>{`${connectionType}`}</Text>
+        {obj.detail !== null && obj.type === 'wifi' && (
+          <Fragment>
+            <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
+            {itemDetails.map((detail, index) => {
+              const detailProps = {
+                detail,
+                index,
+              };
+              return <List key={index} {...detailProps} />;
+            })}
+            <Text style={[text.bodyBold, { paddingTop: 20 }]}>
+              CONNECTION DETAILS
+            </Text>
+            {itemDetailsWifi.map((detail, index) => {
+              const detailProps = {
+                detail,
+                index,
+              };
+              return <List key={index} {...detailProps} />;
+            })}
+          </Fragment>
+        )}
 
-        <Button
-          onPress={() => navigation.navigate('Device')}
-          title="View Device Info"
-          color="#841584"
-        />
-        {location === true ? (
+        {obj.detail !== null && obj.type === 'cellular' && (
+          <>
+            <Text style={text.bodyTitleBold}>{`${obj.details.carrier}`}</Text>
+            {itemDetails.map((detail, index) => {
+              const detailProps = {
+                detail,
+                index,
+              };
+              return <List key={index} {...detailProps} />;
+            })}
+            <Text style={[text.bodyBold, { paddingTop: 20 }]}>
+              CONNECTION DETAILS
+            </Text>
+            {itemDetailsCellular.map((detail, index) => {
+              const detailProps = {
+                detail,
+                index,
+              };
+              return <List key={index} {...detailProps} />;
+            })}
+          </>
+        )}
+
+        {/* {location === true ? (
           <Text style={{ color: 'black' }}>Location enabled</Text>
         ) : (
           <Button
@@ -157,8 +210,14 @@ const Home = ({ navigation }) => {
             title="Enable Location"
             color="#841584"
           />
-        )}
-        <Primary />
+        )} */}
+        <List {...itemDetails} />
+        <Primary
+          onPress={() => {
+            navigation.navigate('Device');
+          }}
+          title={'View Device Info'}
+        />
       </View>
     </Container>
   );

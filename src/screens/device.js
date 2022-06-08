@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
-import getInfo from '../DeviceInfo';
 import DeviceInfo, { getManufacturer } from 'react-native-device-info';
+import Container from '../elements/Container';
+import Header from '../components/header';
+import text from '../styles/text';
+import Detail from '../components/device/detail';
 
 const Home = () => {
   const [deviceHardware, setDeviceHardware] = useState({});
@@ -79,67 +82,149 @@ const Home = () => {
     setDeviceHardware(device);
   };
 
+  const infoOS = [
+    {
+      caption: 'User Agent: ',
+      value: deviceHardware.buildId,
+    },
+    {
+      caption: 'Android ID: ',
+      value: deviceHardware.userAgent,
+    },
+    {
+      caption: 'Instance ID: ',
+      value: deviceHardware.instanceId,
+    },
+    {
+      caption: 'Build ID: ',
+      value: deviceHardware.buildId,
+    },
+    {
+      caption: 'Synchronized Unique ID: ',
+      value: deviceHardware.synchronizedUniqueId,
+    },
+    {
+      caption: 'Bootloader: ',
+      value: deviceHardware.bootloader,
+    },
+    {
+      caption: 'Security Patch: ',
+      value: deviceHardware.securityPatch,
+    },
+    {
+      caption: 'Code Name: ',
+      value: deviceHardware.codename,
+    },
+    {
+      caption: 'Host: ',
+      value: deviceHardware.host,
+    },
+    {
+      caption: 'API Level: ',
+      value: deviceHardware.ApiLevel,
+    },
+    {
+      caption: 'Supported Abis: ',
+      value: deviceHardware.supportedAbis,
+    },
+    {
+      caption: 'Supported 32 Bit Abis: ',
+      value: deviceHardware.supported32BitAbis,
+    },
+    {
+      caption: 'Supported 64 Bit Abis: ',
+      value: deviceHardware.supported64BitAbis,
+    },
+  ];
+
+  const infoHardware = [
+    {
+      caption: 'Product',
+      value: deviceHardware.product ? deviceHardware.product : 'Not Available',
+    },
+    {
+      caption: 'Hardware',
+      value: deviceHardware.hardware
+        ? deviceHardware.hardware
+        : 'Not Available',
+    },
+    {
+      caption: 'Pin or Fingerprint Set',
+      value: deviceHardware.isPinOrFingerprintSet
+        ? deviceHardware.isPinOrFingerprintSet
+        : 'Not Available',
+    },
+    {
+      caption: 'Battery Level',
+      value:
+        deviceHardware.powerState !== undefined
+          ? deviceHardware.powerState.batteryLevel === 1
+            ? '100%'
+            : deviceHardware.powerState.batteryLevel
+          : 'Not Available',
+    },
+    {
+      caption: 'Low Power Mode',
+      value:
+        deviceHardware.powerState !== undefined
+          ? deviceHardware.powerState.lowPowerMode
+            ? 'ON'
+            : 'OFF'
+          : 'Not Available',
+    },
+    {
+      caption: 'Battery Status',
+      value:
+        deviceHardware.powerState !== undefined
+          ? deviceHardware.powerState.batteryState.toUpperCase()
+          : 'Not Available',
+    },
+  ];
+
+  const infoMemory = [
+    {
+      caption: 'Used Memory',
+      value: deviceHardware.usedMemory,
+    },
+    {
+      caption: 'Maximum Memory',
+      value: deviceHardware.maxMemory,
+    },
+    {
+      caption: 'Total Memory',
+      value: deviceHardware.totalMemory,
+    },
+    {
+      caption: 'Free Storage ',
+      value: deviceHardware.freeDiskStorage,
+    },
+    {
+      caption: 'Total Storage',
+      value: deviceHardware.totalDiskCapacity,
+    },
+  ];
+
+  console.log(
+    'Check device hardware available',
+    Object.keys(deviceHardware) === 0,
+  );
   console.log('Device Hardware', deviceHardware);
   return (
-    <ScrollView>
-      <Text style={{ color: 'black' }}>This is where we show device info</Text>
-      <Text style={{ color: 'black' }}>{`manufacturer: ${deviceHardware.manufacturer}`}</Text>
-      <Text style={{ color: 'black' }}>{`buildId: ${deviceHardware.buildId}`}</Text>
-      <Text style={{ color: 'black' }}>{`isCameraPresent: ${deviceHardware.isCameraPresent}`}</Text>
-      <Text style={{ color: 'black' }}>{`deviceName: ${deviceHardware.deviceName}`}</Text>
-      <Text style={{ color: 'black' }}>{`usedMemory: ${deviceHardware.usedMemory}`}</Text>
-      <Text style={{ color: 'black' }}>{`userAgent: ${deviceHardware.userAgent}`}</Text>
-      <Text style={{ color: 'black' }}>{`instanceId: ${deviceHardware.instanceId}`}</Text>
-      <Text style={{ color: 'black' }}>{`installReferrer: ${deviceHardware.installReferrer}`}</Text>
-      <Text style={{ color: 'black' }}>{`installerPackageName: ${deviceHardware.installerPackageName}`}</Text>
-      <Text style={{ color: 'black' }}>{`isEmulator: ${deviceHardware.isEmulator}`}</Text>
-      <Text style={{ color: 'black' }}>{`fontScale: ${deviceHardware.fontScale}`}</Text>
-      <Text style={{ color: 'black' }}>{`hasNotch: ${deviceHardware.hasNotch}`}</Text>
-      <Text style={{ color: 'black' }}>{`firstInstallTime: ${deviceHardware.firstInstallTime}`}</Text>
-      <Text style={{ color: 'black' }}>{`lastUpdateTime: ${deviceHardware.lastUpdateTime}`}</Text>
-      <Text style={{ color: 'black' }}>{`serialNumber: ${deviceHardware.serialNumber}`}</Text>
-      <Text style={{ color: 'black' }}>{`androidId: ${deviceHardware.androidId}`}</Text>
-      <Text style={{ color: 'black' }}>{`IpAddress: ${deviceHardware.IpAddress}`}</Text>
-      <Text style={{ color: 'black' }}>{`MacAddress: ${deviceHardware.MacAddress}`}</Text>
-      <Text style={{ color: 'black' }}>{`phoneNumber: ${deviceHardware.phoneNumber}`}</Text>
-      <Text style={{ color: 'black' }}>{`ApiLevel: ${deviceHardware.ApiLevel}`}</Text>
-      <Text style={{ color: 'black' }}>{`carrier: ${deviceHardware.carrier}`}</Text>
-      <Text style={{ color: 'black' }}>{`totalMemory: ${deviceHardware.totalMemory}`}</Text>
-      <Text style={{ color: 'black' }}>{`maxMemory: ${deviceHardware.maxMemory}`}</Text>
-      <Text style={{ color: 'black' }}>{`totalDiskCapacity: ${deviceHardware.totalDiskCapacity}`}</Text>
-      <Text style={{ color: 'black' }}>{`totalDiskCapacityOld: ${deviceHardware.totalDiskCapacityOld}`}</Text>
-      <Text style={{ color: 'black' }}>{`freeDiskStorage: ${deviceHardware.freeDiskStorage}`}</Text>
-      <Text style={{ color: 'black' }}>{`freeDiskStorageOld: ${deviceHardware.freeDiskStorageOld}`}</Text>
-      <Text style={{ color: 'black' }}>{`batteryLevel: ${deviceHardware.batteryLevel}`}</Text>
-      <Text style={{ color: 'black' }}>{`isLandscape: ${deviceHardware.isLandscape}`}</Text>
-      <Text style={{ color: 'black' }}>{`isAirplaneMode: ${deviceHardware.isAirplaneMode}`}</Text>
-      <Text style={{ color: 'black' }}>{`isBatteryCharging: ${deviceHardware.isBatteryCharging}`}</Text>
-      <Text style={{ color: 'black' }}>{`isPinOrFingerprintSet: ${deviceHardware.isPinOrFingerprintSet}`}</Text>
-      <Text style={{ color: 'black' }}>{`supportedAbis: ${deviceHardware.supportedAbis}`}</Text>
-      <Text style={{ color: 'black' }}>{`hasSystemFeature: ${deviceHardware.hasSystemFeature}`}</Text>
-      {/* <Text style={{ color: 'black' }}>{deviceHardware.getSystemAvailableFeatures}</Text> */}
-      {/* <Text style={{ color: 'black' }}>{deviceHardware.powerState}</Text> */}
-      <Text style={{ color: 'black' }}>{`isLocationEnabled: ${deviceHardware.isLocationEnabled}`}</Text>
-      <Text style={{ color: 'black' }}>{`headphones: ${deviceHardware.headphones}`}</Text>
-      {/* <Text style={{ color: 'black' }}>{deviceHardware.getAvailableLocationProviders}</Text> */}
-      <Text style={{ color: 'black' }}>{`bootloader: ${deviceHardware.bootloader}`}</Text>
-      <Text style={{ color: 'black' }}>{`device: ${deviceHardware.device}`}</Text>
-      <Text style={{ color: 'black' }}>{`fingerprint: ${deviceHardware.fingerprint}`}</Text>
-      <Text style={{ color: 'black' }}>{`hardware: ${deviceHardware.hardware}`}</Text>
-      <Text style={{ color: 'black' }}>{`host: ${deviceHardware.host}`}</Text>
-      <Text style={{ color: 'black' }}>{`product: ${deviceHardware.product}`}</Text>
-      <Text style={{ color: 'black' }}>{`tags: ${deviceHardware.tags}`}</Text>
-      <Text style={{ color: 'black' }}>{`type: ${deviceHardware.type}`}</Text>
-      <Text style={{ color: 'black' }}>{`baseOS: ${deviceHardware.baseOS}`}</Text>
-      <Text style={{ color: 'black' }}>{`previewSdkInt: ${deviceHardware.previewSdkInt}`}</Text>
-      <Text style={{ color: 'black' }}>{`securityPatch: ${deviceHardware.securityPatch}`}</Text>
-      <Text style={{ color: 'black' }}>{`codename: ${deviceHardware.codename}`}</Text>
-      <Text style={{ color: 'black' }}>{`incremental: ${deviceHardware.incremental}`}</Text>
-      <Text style={{ color: 'black' }}>{`supported32BitAbis: ${deviceHardware.supported32BitAbis}`}</Text>
-      <Text style={{ color: 'black' }}>{`supported64BitAbis: ${deviceHardware.supported64BitAbis}`}</Text>
-      <Text style={{ color: 'black' }}>{`synchronizedUniqueId: ${deviceHardware.synchronizedUniqueId}`}</Text>
-
-    </ScrollView>
+    <Container>
+      <Header
+        title={
+          deviceHardware.manufacturer
+            ? deviceHardware.manufacturer.toUpperCase()
+            : 'Device'
+        }
+      />
+      <ScrollView style={{ paddingHorizontal: 10, paddingBottom: 100 }}>
+        <Text style={[text.titleBold]}>Galaxy S10e</Text>
+        <Detail title="Operating System (OS)" detail={infoOS} />
+        <Detail title="Hardware Information" detail={infoHardware} />
+        <Detail title="Memory Information" detail={infoMemory} />
+      </ScrollView>
+    </Container>
   );
 };
 
