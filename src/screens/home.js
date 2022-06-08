@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment } from 'react';
 import {
   View,
   Text,
-  Button,
   PermissionsAndroid,
   Platform,
   Image,
@@ -118,7 +117,8 @@ const Home = ({ navigation }) => {
     },
     {
       caption: 'Strength: ',
-      value: obj.details === null ? 'Not Available' : obj.details.strength,
+      value:
+        obj.details === null ? 'Not Available' : `${obj.details.strength}%`,
     },
     {
       caption: 'BSSID: ',

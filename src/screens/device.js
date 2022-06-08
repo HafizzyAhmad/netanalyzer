@@ -84,11 +84,11 @@ const Home = () => {
 
   const infoOS = [
     {
-      caption: 'User Agent: ',
-      value: deviceHardware.buildId,
+      caption: 'Android ID: ',
+      value: deviceHardware.androidId,
     },
     {
-      caption: 'Android ID: ',
+      caption: 'User Agent: ',
       value: deviceHardware.userAgent,
     },
     {
@@ -204,6 +204,7 @@ const Home = () => {
     },
   ];
 
+
   console.log(
     'Check device hardware available',
     Object.keys(deviceHardware) === 0,
@@ -217,6 +218,9 @@ const Home = () => {
             ? deviceHardware.manufacturer.toUpperCase()
             : 'Device'
         }
+        enableBack={true}
+        hasIconRight={true}
+        onPress={hardwareSync}
       />
       <ScrollView style={{ paddingHorizontal: 10, paddingBottom: 100 }}>
         <Text style={[text.titleBold]}>Galaxy S10e</Text>

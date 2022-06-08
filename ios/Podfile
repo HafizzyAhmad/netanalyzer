@@ -20,6 +20,8 @@ target 'analyzer' do
   )
 
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'analyzerTests' do
     inherit! :complete
     # Pods for testing

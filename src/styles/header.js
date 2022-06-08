@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import color from './color';
 
 const baseStyle = {
   flexDirection: 'row',
@@ -9,9 +10,10 @@ const baseStyle = {
 export default StyleSheet.create({
   arrowContainer: {
     ...baseStyle,
-    // ...color.bgWhite,
-    // justifyContent: 'space-between',
+    ...color.bg,
+    justifyContent: 'space-between',
     height: 70,
+    paddingHorizontal: 15,
   },
   headerContainer: {
     // paddingHorizontal: 16,

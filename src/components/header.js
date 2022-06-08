@@ -5,21 +5,44 @@ import header from '../styles/header';
 import text from '../styles/text';
 import * as RootNavigation from '../routes/RootNavigation';
 // import Icon from 'react-native-vector-icons/Ionicons';
-// import { ArrowLeft } from './icon';
+import { ArrowLeft, IconRight } from './icon';
+import { useNavigation } from '@react-navigation/native';
 
 /**
  * @param title : String
- * @param hasArrow :bool
+ * @param enableBack :bool
+ * @param hasIconRight : bool
+ * @param goBack : return
+ * @param onPress : return
  */
 
-const Header = ({ title, hasArrow }) => {
+const Header = ({ title, enableBack, hasIconRight, onPress }) => {
+  const enableBack2 = true;
+  const hasIconRight2 = true;
+  const navigation = useNavigation();
+
   return (
-    <View style={[header.arrowContainer]}>
-      <View style={header.headerContainer}>
-        <Text style={{color: 'black', fontSize: 20}}>{title}</Text>
-        {/* <ArrowLeft /> */}
+    <Fragment>
+      <View style={[header.arrowContainer]}>
+        {enableBack ? (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ArrowLeft />
+          </TouchableOpacity>
+        ) : (
+          <View style={{ height: 20, width: 20 }} />
+        )}
+        <View style={{ alignItems: 'center'}}>
+          <Text style={text.bodyTitleBold}>{title}</Text>
+        </View>
+        {hasIconRight ? (
+          <TouchableOpacity onPress={() => onPress()}>
+            <IconRight />
+          </TouchableOpacity>
+        ) : (
+          <View style={{ height: 20, width: 20 }} />
+        )}
       </View>
-    </View>
+    </Fragment>
   );
 };
 
