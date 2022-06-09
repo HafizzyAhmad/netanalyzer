@@ -8,6 +8,6 @@ export default StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.primary,
+    backgroundColor: '#526be9',
   },
 });

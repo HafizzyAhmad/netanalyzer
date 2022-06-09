@@ -15,6 +15,7 @@ export default StyleSheet.create({
   fontColor: { color: color.text },
   fontColorWhite: { color: color.white },
   bgColor: { color: color.bg },
+  bgBlue: { backgroundColor: color.blue },
   primary: { color: color.blue },
   warning: { color: color.red },
   purple: { color: color.purple },

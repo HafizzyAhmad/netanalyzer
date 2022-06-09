@@ -6,6 +6,7 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -14,6 +15,7 @@ import Primary from '../components/primary';
 import Header from '../components/header';
 import text from '../styles/text';
 import List from '../components/list';
+import LottieView from 'lottie-react-native';
 
 const Home = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -68,8 +70,14 @@ const Home = ({ navigation }) => {
   }, [netInfo.isConnected, location]);
 
   const obj = JSON.parse(JSON.stringify(netInfo));
-  const imgWave = require('../assets/image/pulse.png');
-  const connectionType = obj.type.toUpperCase();
+  const imgInternet = require('../assets/image/internet.png');
+  const imgNoInternet = require('../assets/image/no-internet.png');
+  const connectionEnable = obj.type !== 'none';
+
+  const connectionType =
+    obj.type === 'cellular' || obj.type === 'wifi'
+      ? obj.type.toUpperCase()
+      : 'You are not connected to internet';
 
   const itemDetails = [
     {
@@ -86,7 +94,7 @@ const Home = ({ navigation }) => {
       value:
         obj.isInternetReachable === null
           ? 'Not Available'
-          : obj.isConnected
+          : obj.isInternetReachable
           ? 'YES'
           : 'NO',
     },
@@ -145,78 +153,88 @@ const Home = ({ navigation }) => {
   return (
     <Container>
       <Header title="Analyzer App" />
-      <TouchableOpacity style={{ alignItems: 'center' }}>
-        <Image
-          source={imgWave}
-          style={{
-            height: 250,
-            width: 250,
-          }}
-        />
-      </TouchableOpacity>
-      <View style={{ alignItems: 'center', paddingVertical: 10 }}>
-        <Text style={text.bodyBold}>{`${connectionType}`}</Text>
-        {obj.detail !== null && obj.type === 'wifi' && (
-          <Fragment>
-            <View style={{ paddingVertical: 5, alignItems: 'center' }}>
-              <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
-              {obj.details.ssid === undefined && (
-                <Text style={text.captionError}>
-                  Please enable location to get wifi name
-                </Text>
-              )}
-            </View>
-            {itemDetails.map((detail, index) => {
-              const detailProps = {
-                detail,
-                index,
-              };
-              return <List key={index} {...detailProps} />;
-            })}
-            <Text style={[text.bodyBold, { paddingTop: 10 }]}>
-              CONNECTION DETAILS
-            </Text>
-            {itemDetailsWifi.map((detail, index) => {
-              const detailProps = {
-                detail,
-                index,
-              };
-              return <List key={index} {...detailProps} />;
-            })}
-          </Fragment>
-        )}
+      <ScrollView>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <LottieView
+            source={require('../assets/lottie/wave.json')}
+            style={{ width: '80%', aspectRatio: 1 }}
+            autoPlay
+            loop
+          />
+          <TouchableOpacity style={{ position: 'absolute' }}>
+            <Image
+              source={connectionEnable ? imgInternet : imgNoInternet}
+              style={{
+                height: 100,
+                width: 100,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+          <Text style={text.bodyBold}>{`${connectionType}`}</Text>
+          {obj.detail !== null && obj.type === 'wifi' && (
+            <Fragment>
+              <View style={{ paddingVertical: 5, alignItems: 'center' }}>
+                <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
+                {obj.details.ssid === undefined && (
+                  <Text style={text.captionError}>
+                    Please enable location to get wifi name
+                  </Text>
+                )}
+              </View>
+              {itemDetails.map((detail, index) => {
+                const detailProps = {
+                  detail,
+                  index,
+                };
+                return <List key={index} {...detailProps} />;
+              })}
+              <Text style={[text.bodyBold, { paddingTop: 10 }]}>
+                CONNECTION DETAILS
+              </Text>
+              {itemDetailsWifi.map((detail, index) => {
+                const detailProps = {
+                  detail,
+                  index,
+                };
+                return <List key={index} {...detailProps} />;
+              })}
+            </Fragment>
+          )}
 
-        {obj.detail !== null && obj.type === 'cellular' && (
-          <>
-            <Text style={text.bodyTitleBold}>{`${obj.details.carrier}`}</Text>
-            {itemDetails.map((detail, index) => {
-              const detailProps = {
-                detail,
-                index,
-              };
-              return <List key={index} {...detailProps} />;
-            })}
-            <Text style={[text.bodyBold, { paddingTop: 20 }]}>
-              CONNECTION DETAILS
-            </Text>
-            {itemDetailsCellular.map((detail, index) => {
-              const detailProps = {
-                detail,
-                index,
-              };
-              return <List key={index} {...detailProps} />;
-            })}
-          </>
-        )}
-        <List {...itemDetails} />
-        <View style={{padding: 10}}/>
-        <Primary
-          onPress={() => {
-            navigation.navigate('Device');
-          }}
-          title={'View Device Info'}
-        />
-      </View>
+          {obj.detail !== null && obj.type === 'cellular' && (
+            <>
+              <Text style={text.bodyTitleBold}>{`${obj.details.carrier}`}</Text>
+              {itemDetails.map((detail, index) => {
+                const detailProps = {
+                  detail,
+                  index,
+                };
+                return <List key={index} {...detailProps} />;
+              })}
+              <Text style={[text.bodyBold, { paddingTop: 20 }]}>
+                CONNECTION DETAILS
+              </Text>
+              {itemDetailsCellular.map((detail, index) => {
+                const detailProps = {
+                  detail,
+                  index,
+                };
+                return <List key={index} {...detailProps} />;
+              })}
+            </>
+          )}
+          <List {...itemDetails} />
+          <View style={{ padding: 10 }} />
+          <Primary
+            onPress={() => {
+              navigation.navigate('Device');
+            }}
+            title={'View Device Info'}
+          />
+        </View>
+      </ScrollView>
     </Container>
   );
 };

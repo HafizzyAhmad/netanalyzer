@@ -222,9 +222,9 @@ const Home = () => {
         hasIconRight={true}
         onPress={hardwareSync}
       />
-      <ScrollView style={{ paddingHorizontal: 10, paddingBottom: 100 }}>
-        <Text style={[text.titleBold]}>Galaxy S10e</Text>
-        <Detail title="Operating System (OS)" detail={infoOS} />
+      <ScrollView style={{ paddingHorizontal: 20, paddingBottom: 100 }}>
+        <Text style={[text.titleBold]}>{deviceHardware.deviceName}</Text>
+        <Detail title="Operating System (OS) Information" detail={infoOS} />
         <Detail title="Hardware Information" detail={infoHardware} />
         <Detail title="Memory Information" detail={infoMemory} />
       </ScrollView>
