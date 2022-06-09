@@ -15,7 +15,7 @@ const Detail = ({ detail, title }) => {
       <View style={{ paddingVertical: 5 }}>
         {detail.map((item, index) => (
           <View key={index} style={{ paddingVertical: 3 }}>
-            <Text style={text.bodyBold}>{item.caption}</Text>
+            <Text style={text.bodyBoldGray}>{item.caption}</Text>
             {Array.isArray(item.value) === false ? (
               <Text style={text.bodyReg}>{item.value}</Text>
             ) : (

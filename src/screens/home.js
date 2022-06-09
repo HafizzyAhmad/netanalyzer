@@ -144,21 +144,28 @@ const Home = ({ navigation }) => {
 
   return (
     <Container>
-      <Header title='Analyzer App'/>
-      <TouchableOpacity style={{ alignItems: 'center', padding: 20 }}>
+      <Header title="Analyzer App" />
+      <TouchableOpacity style={{ alignItems: 'center' }}>
         <Image
           source={imgWave}
           style={{
-            height: 300,
-            width: 300,
+            height: 250,
+            width: 250,
           }}
         />
       </TouchableOpacity>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center', paddingVertical: 10 }}>
         <Text style={text.bodyBold}>{`${connectionType}`}</Text>
         {obj.detail !== null && obj.type === 'wifi' && (
           <Fragment>
-            <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
+            <View style={{ paddingVertical: 5, alignItems: 'center' }}>
+              <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
+              {obj.details.ssid === undefined && (
+                <Text style={text.captionError}>
+                  Please enable location to get wifi name
+                </Text>
+              )}
+            </View>
             {itemDetails.map((detail, index) => {
               const detailProps = {
                 detail,
@@ -166,7 +173,7 @@ const Home = ({ navigation }) => {
               };
               return <List key={index} {...detailProps} />;
             })}
-            <Text style={[text.bodyBold, { paddingTop: 20 }]}>
+            <Text style={[text.bodyBold, { paddingTop: 10 }]}>
               CONNECTION DETAILS
             </Text>
             {itemDetailsWifi.map((detail, index) => {
@@ -201,17 +208,8 @@ const Home = ({ navigation }) => {
             })}
           </>
         )}
-
-        {/* {location === true ? (
-          <Text style={{ color: 'black' }}>Location enabled</Text>
-        ) : (
-          <Button
-            onPress={() => alert('Go to setting')}
-            title="Enable Location"
-            color="#841584"
-          />
-        )} */}
         <List {...itemDetails} />
+        <View style={{padding: 10}}/>
         <Primary
           onPress={() => {
             navigation.navigate('Device');

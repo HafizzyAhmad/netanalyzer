@@ -3,11 +3,11 @@ import color from './color';
 
 export default StyleSheet.create({
   primary: {
-    color: color.primary,
-    borderRadius: 5,
+    width: '50%',
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 40,
-    width: '50%',
+    backgroundColor: color.primary,
   },
 });

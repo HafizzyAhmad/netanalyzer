@@ -28,7 +28,8 @@ let titleBold,
   bodyBold,
   bodyTitle,
   bodyTitleBold,
-  captionBold;
+  captionBold,
+  captionRegular;
 titleBold = { fontSize: TITLE, fontFamily: bold };
 titleRegular = { fontSize: SUBTITLE, fontFamily: regular };
 bodyRegular = { fontSize: BODY, fontFamily: regular };
@@ -36,6 +37,7 @@ bodyBold = { fontSize: BODY, fontFamily: bold };
 bodyTitle = { fontSize: HEADER, fontFamily: regular };
 bodyTitleBold = { fontSize: HEADER, fontFamily: bold };
 captionBold = { fontSize: CAPTION, fontFamily: bold };
+captionRegular = { fontSize: CAPTION, fontFamily: regular };
 
 export default StyleSheet.create({
   //BODY
@@ -48,8 +50,12 @@ export default StyleSheet.create({
   bodyTitleBold: { ...bodyTitleBold, ...color.fontColor },
   bodyTitleBoldWhite: { ...bodyTitleBold, ...color.fontColorWhite },
   labelBoldPurple: { ...captionBold, ...color.purple },
+  bodyBoldGray: { ...bodyBold, ...color.gray },
 
   //TITLE
   titleBold: { ...titleBold, ...color.fontColor },
   subTitle: { ...titleRegular, ...color.fontColor },
+
+  //CAPTION
+  captionError: { ...captionRegular, ...color.warning },
 });
