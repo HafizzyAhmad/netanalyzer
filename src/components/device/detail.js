@@ -19,7 +19,11 @@ const Detail = ({ detail, title }) => {
             {Array.isArray(item.value) === false ? (
               <Text style={text.bodyReg}>{item.value}</Text>
             ) : (
-              item.value.map(data => <Text style={text.bodyReg}>{data}</Text>)
+              item.value.map((data, key) => (
+                <Text key={key} style={text.bodyReg}>
+                  {data}
+                </Text>
+              ))
             )}
           </View>
         ))}

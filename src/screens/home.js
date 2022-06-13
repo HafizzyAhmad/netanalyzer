@@ -36,9 +36,9 @@ const Home = ({ navigation }) => {
           },
         );
         console.log('Check granted', granted);
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        if (granted) {
+          NetInfo.refresh('wifi').then();
           setLocation(true);
-          NetInfo.refresh().then();
           // alert('Location permission approved');
         } else {
           setLocation(false);
