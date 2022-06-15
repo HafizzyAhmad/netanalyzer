@@ -16,11 +16,17 @@ import Header from '../components/header';
 import text from '../styles/text';
 import List from '../components/list';
 import LottieView from 'lottie-react-native';
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
 const Home = ({ navigation }) => {
   const netInfo = useNetInfo();
 
   const [location, setLocation] = useState();
+  const [data, setData] = useState();
+
+  /**
+   * Need to use useState instead of hook because app unable to get latest state
+   */
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -37,7 +43,7 @@ const Home = ({ navigation }) => {
         );
         console.log('Check granted', granted);
         if (granted) {
-          NetInfo.refresh('wifi').then();
+          fetchWifi();
           setLocation(true);
           // alert('Location permission approved');
         } else {
@@ -50,10 +56,77 @@ const Home = ({ navigation }) => {
     }
   };
 
-  console.log('Permission Location', location);
+  const configure = () => {
+    NetInfo.configure({
+      reachabilityUrl: 'https://clients3.google.com/generate_204',
+      reachabilityTest: async response => response.status === 204,
+      reachabilityLongTimeout: 60 * 1000, // 60s
+      reachabilityShortTimeout: 5 * 1000, // 5s
+      reachabilityRequestTimeout: 15 * 1000, // 15s
+      reachabilityShouldRun: () => true,
+      shouldFetchWiFiSSID: true, // met iOS requirements to get SSID. Will leak memory if set to true without meeting requirements.
+    });
+  };
+
+  const checkLocationPermission = () => {
+    if (Platform.OS === 'ios') {
+      check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            requestPermission();
+            // ADD UNTUK REQUEST PERMISSION
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            configure();
+            setLocation(true);
+            // if (Object.keys(netInfo.details) !== 3) {
+            //   fetchWifi();
+            // }
+            fetchWifi();
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    }
+  };
+
+  const requestPermission = () => {
+    request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
+      console.log('Result Permission: ', result);
+      if (result === 'granted') {
+        configure();
+        fetchWifi();
+        setLocation(true);
+      } else {
+        setLocation(false);
+      }
+    });
+  };
+
+  const fetchWifi = () => {
+    NetInfo.fetch().then(res => {
+      setData(res);
+    });
+  };
+
+  // console.log('Permission Location', location);
 
   useEffect(() => {
-    NetInfo.fetch().then(res => {});
+    NetInfo.fetch().then();
   }, []);
 
   // const fetch = () => {};
@@ -65,14 +138,23 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     //status change
     if (location === false || location === undefined) {
+      checkLocationPermission();
       requestLocationPermission();
     }
   }, [netInfo.isConnected, location]);
+
+  // useEffect(() => {
+  //   configure();
+  // }, [location]);
 
   const obj = JSON.parse(JSON.stringify(netInfo));
   const imgInternet = require('../assets/image/internet.png');
   const imgNoInternet = require('../assets/image/no-internet.png');
   const connectionEnable = obj.type !== 'none';
+
+  console.log('Object WiFi: ', data);
+  console.log('COMPARE WITH');
+  console.log('Net Info Hooks: ', netInfo);
 
   const connectionType =
     obj.type === 'cellular' || obj.type === 'wifi'
@@ -142,6 +224,17 @@ const Home = ({ navigation }) => {
     },
   ];
 
+  const itemDetailsWifiiOS = [
+    {
+      caption: 'IP Address: ',
+      value: obj.details === null ? 'Not Available' : obj.details.ipAddress,
+    },
+    {
+      caption: 'Subnet: ',
+      value: obj.details === null ? 'Not Available' : obj.details.subnet,
+    },
+  ];
+
   const itemDetailsCellular = [
     {
       caption: 'Generation: ',
@@ -149,6 +242,13 @@ const Home = ({ navigation }) => {
         obj.details === null ? 'Not Available' : obj.details.cellularGeneration,
     },
   ];
+
+  const wifiName =
+    obj.details === null || undefined
+      ? 'Not Available'
+      : data === undefined
+      ? 'Not Available'
+      : data.details.ssid;
 
   return (
     <Container>
@@ -176,8 +276,8 @@ const Home = ({ navigation }) => {
           {obj.detail !== null && obj.type === 'wifi' && (
             <Fragment>
               <View style={{ paddingVertical: 5, alignItems: 'center' }}>
-                <Text style={text.bodyTitleBold}>{`${obj.details.ssid}`}</Text>
-                {obj.details.ssid === undefined && (
+                <Text style={text.bodyTitleBold}>{`${wifiName}`}</Text>
+                {location === undefined && (
                   <Text style={text.captionError}>
                     Please enable location to get wifi name
                   </Text>
@@ -193,13 +293,22 @@ const Home = ({ navigation }) => {
               <Text style={[text.bodyBold, { paddingTop: 10 }]}>
                 CONNECTION DETAILS
               </Text>
-              {itemDetailsWifi.map((detail, index) => {
-                const detailProps = {
-                  detail,
-                  index,
-                };
-                return <List key={index} {...detailProps} />;
-              })}
+              {Platform.OS === 'android' &&
+                itemDetailsWifi.map((detail, index) => {
+                  const detailProps = {
+                    detail,
+                    index,
+                  };
+                  return <List key={index} {...detailProps} />;
+                })}
+              {Platform.OS === 'ios' &&
+                itemDetailsWifiiOS.map((detail, index) => {
+                  const detailProps = {
+                    detail,
+                    index,
+                  };
+                  return <List key={index} {...detailProps} />;
+                })}
             </Fragment>
           )}
 
