@@ -95,7 +95,7 @@ const Home = () => {
     },
     {
       caption: 'User Agent',
-      value: deviceHardware.buildId,
+      value: deviceHardware.userAgent,
     },
     {
       caption: 'Synchronized Unique ID',
