@@ -36,7 +36,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>Get wifi ssid name</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
   <string>Get wifi ssid name</string>
   <key>NSLocationAlwaysUsageDescription</key>
