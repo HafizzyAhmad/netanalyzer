@@ -54,6 +54,18 @@ const Home = ({ navigation }) => {
         console.log('error', err);
       }
     }
+    if (Platform.OS === 'ios') {
+      request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
+        console.log('Result Permission: ', result);
+        if (result === 'granted') {
+          configure();
+          fetchWifi();
+          setLocation(true);
+        } else {
+          setLocation(false);
+        }
+      });
+    }
   };
 
   const configure = () => {
@@ -81,7 +93,7 @@ const Home = ({ navigation }) => {
             console.log(
               'The permission has not been requested / is denied but requestable',
             );
-            requestPermission();
+            requestLocationPermission();
             // ADD UNTUK REQUEST PERMISSION
             break;
           case RESULTS.LIMITED:
@@ -104,18 +116,6 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const requestPermission = () => {
-    request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(result => {
-      console.log('Result Permission: ', result);
-      if (result === 'granted') {
-        configure();
-        fetchWifi();
-        setLocation(true);
-      } else {
-        setLocation(false);
-      }
-    });
-  };
 
   const fetchWifi = () => {
     NetInfo.fetch().then(res => {
@@ -189,15 +189,15 @@ const Home = ({ navigation }) => {
           ? 'YES'
           : 'NO',
     },
-    {
-      caption: 'Connection Expensive: ',
-      value:
-        obj.isConnectionExpensive === null
-          ? 'Not Available'
-          : obj.isConnected
-          ? 'YES'
-          : 'NO',
-    },
+    // {
+    //   caption: 'Connection Expensive: ',
+    //   value:
+    //     obj.isConnectionExpensive === null
+    //       ? 'Not Available'
+    //       : obj.isConnected
+    //       ? 'YES'
+    //       : 'NO',
+    // },
   ];
 
   const itemDetailsWifi = [
