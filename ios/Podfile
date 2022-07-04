@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'analyzer' do
+target 'wanna' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -28,7 +28,7 @@ target 'analyzer' do
   pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
-  target 'analyzerTests' do
+  target 'wannaTests' do
     inherit! :complete
     # Pods for testing
   end

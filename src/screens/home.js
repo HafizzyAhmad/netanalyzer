@@ -252,7 +252,7 @@ const Home = ({ navigation }) => {
 
   return (
     <Container>
-      <Header title="Analyzer App" />
+      <Header title="wanna App" />
       <ScrollView>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <LottieView
